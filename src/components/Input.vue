@@ -2,7 +2,7 @@
   <div>
     <BInputGroup>
       <div :class="classDiv">
-        {{ nomeDoCampo }} 
+        {{ label }} 
         <input
           :type="type || 'text'"
           :placeholder="placeholder || ''"
@@ -31,7 +31,7 @@ export default {
     name: String,
     classInp: String,
     classDiv: String,
-    nomeDoCampo: String
+    label: String
   },
 };
 </script>

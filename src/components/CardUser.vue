@@ -10,16 +10,15 @@
       </BCardHeader>
       <BCardFooter>
         <Button
-          texto="Editar Usuário"
-          :isPrimary="true"
+          label="Editar Usuário"
           :disabled="false"
-          :onClickFunction="() => editarUsuario(user.email)"
+          :onClickFunction="() => editarUsuario(user._id)"
         ></Button>
         <Button
-          texto="Remover Usuário"
-          :isPrimary="false"
+          label="Remover Usuário"
+          variant="danger"
           :disabled="false"
-          :onClickFunction="() => removerUsuario(user.email)"
+          :onClickFunction="() => removerUsuario(user._id)"
         ></Button
       ></BCardFooter>
     </BCard>
@@ -28,7 +27,7 @@
 
 <script>
 import { BCard, BCardHeader, BCardTitle, BCardSubTitle } from "bootstrap-vue";
-import Button from "./../components/Button";
+import Button from "../components/Button";
 
 export default {
   name: "CardUser",
@@ -43,11 +42,11 @@ export default {
     user: Object,
   },
   methods:{
-    removerUsuario: function(email){
-      console.log(email)
+    removerUsuario: function(_id){
+      this.$store.commit('removeUser', {_id})
     },
-    editarUsuario: function(email){
-      console.log(email)
+    editarUsuario: function(_id){
+      console.log(_id)
     },
   }
 };

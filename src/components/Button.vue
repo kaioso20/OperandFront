@@ -1,13 +1,13 @@
 <template>
   <BButton
     size="sm"
-    :disabled="disabled || false"
-    :type="type ? type : 'button'"
-    :variant="isPrimary ? 'primary' : 'danger'"
-    @click="onClickFunction"
+    :disabled="disabled"
+    :type="type"
+    :variant="variant"
+    v-on="type !== 'submit' ? { click: () => onClickFunction() } : {}"
     class="buttonBoots"
   >
-    {{ texto }}
+    {{ label }}
   </BButton>
 </template>
 
@@ -20,10 +20,19 @@ export default {
     BButton,
   },
   props: {
-    texto: String,
-    isPrimary: Boolean,
-    type: String,
-    disabled: Boolean,
+    label: String,
+    variant: {
+      type: String,
+      default: 'primary'
+    },
+    type: {
+      type: String,
+      default: 'button'
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     onClickFunction: Function,
   },
 };

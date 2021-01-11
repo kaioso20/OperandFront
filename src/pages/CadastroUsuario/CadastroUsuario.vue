@@ -2,9 +2,7 @@
   <div class="container">
     <div class="mt10">
       <Button
-        texto="Voltar para Listagem"
-        :isPrimary="true"
-        :disabled="false"
+        label="Voltar para Listagem"
         :onClickFunction="redirectToList"
       ></Button>
       <form @submit.prevent="saveUser">
@@ -14,8 +12,8 @@
               type="text"
               classInp="form-control"
               classDiv="col-sm-12"
-              nomeDoCampo="Nome:"
-              v-model="data.Nome"
+              label="Nome:"
+              v-model="data.nome"
             />
           </BRow>
         </div>
@@ -23,11 +21,11 @@
           <BRow>
             <Input
               type="email"
-              v-model="data.Email"
+              v-model="data.email"
               placeholder="Eren.Yeager@gmail.com"
               classInp="form-control"
               classDiv="col-sm-12"
-              nomeDoCampo="E-Mail:"
+              label="E-mail:"
             />
           </BRow>
         </div>
@@ -38,8 +36,8 @@
               placeholder="(00) 00000-0000"
               classInp="form-control celularMask"
               classDiv="col-sm-12"
-              nomeDoCampo="Celular:"
-              v-model="data.Celular"
+              label="Celular:"
+              v-model="data.celular"
             />
           </BRow>
         </div>
@@ -49,8 +47,8 @@
               type="password"
               classInp="form-control"
               classDiv="col-sm-12"
-              nomeDoCampo="Senha:"
-              v-model="data.Senha"
+              label="Senha:"
+              v-model="data.senha"
             />
           </BRow>
         </div>
@@ -60,21 +58,16 @@
               type="password"
               classInp="form-control"
               classDiv="col-sm-12"
-              nomeDoCampo="Confirme Senha:"
-              v-model="data.CSenha"
+              label="Confirme senha:"
+              v-model="data.cSenha"
             />
           </BRow>
         </div>
         <div class="mt10">
+          <Button label="Salvar" type="submit"></Button>
           <Button
-            texto="Salvar"
-            type="submit"
-            :isPrimary="true"
-            :onClickFunction="() => {}"
-          ></Button>
-          <Button
-            texto="Limpar Campos"
-            :isPrimary="false"
+            label="Limpar Campos"
+            variant="secondary"
             :onClickFunction="limparCampos"
           ></Button>
         </div>
@@ -88,16 +81,18 @@ import Button from "./../../components/Button";
 import Input from "./../../components/Input";
 import { BRow } from "bootstrap-vue";
 
+import store from "./../../store";
+
 export default {
   name: "CadastroUsuario",
   data() {
     return {
       data: {
-        Nome: "",
-        Email: "",
-        Celular: "",
-        Senha: "",
-        CSenha: "",
+        nome: "",
+        email: "",
+        celular: "",
+        senha: "",
+        cSenha: "",
       },
     };
   },
@@ -109,18 +104,20 @@ export default {
   methods: {
     redirectToList: function () {
       window.location.href = "/#/";
+      return;
     },
     saveUser: function () {
-      const { Nome, Email, Celular, Senha, CSenha } = this.data;
-      console.table([Nome, Email, Celular, Senha, CSenha]);
+      const { nome, email, celular, senha, cSenha } = this.data;
+      if (senha !== cSenha) return;
+      store.commit("incrementUser", { user: { _id: Math.random(), nome, email, celular, senha } });
+      this.redirectToList();
     },
     limparCampos: function () {
-      console.log(1);
-      this.data.Nome = "";
-      this.data.Email = "";
-      this.data.Celular = "";
-      this.data.Senha = "";
-      this.data.CSenha = "";
+      this.data.nome = "";
+      this.data.email = "";
+      this.data.celular = "";
+      this.data.senha = "";
+      this.data.cSenha = "";
     },
   },
 };
