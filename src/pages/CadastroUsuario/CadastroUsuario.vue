@@ -42,6 +42,7 @@
               classInp="form-control celularMask"
               classDiv="col-sm-12"
               label="Celular:"
+              v-mask="mask"
               v-model="data.celular"
             />
           </BRow>
@@ -85,6 +86,7 @@
 import Button from "./../../components/Button";
 import Input from "./../../components/Input";
 import AlertErro from "./../../components/AlertErro";
+import { Mascaras } from "../../utils/masks";
 import { BRow } from "bootstrap-vue";
 
 export default {
@@ -109,6 +111,7 @@ export default {
   data() {
     return {
       errors: [],
+      mask: Mascaras,
       data: {
         _id: "",
         nome: "",
