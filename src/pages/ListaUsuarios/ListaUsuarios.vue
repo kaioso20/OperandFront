@@ -4,13 +4,12 @@
       <Button
         texto="Cadastrar Novo Usuário"
         :isPrimary="true"
-        :disabled="false"
-        :OnClickFunction="RedirectToCad"
+        :onClickFunction="redirectToCad"
       ></Button>
     </div>
-    <div v-if="Users.length > 0">
-      <div v-for="User in Users" :key="User.email">
-        <CardUser :user="User"></CardUser>
+    <div v-if="users.length > 0">
+      <div v-for="user in users" :key="user.email">
+        <CardUser :user="user"></CardUser>
       </div>
     </div>
     <div v-else>
@@ -31,28 +30,28 @@ export default {
     Button,
     CardUser,
   },
-  methods:{
-    RedirectToCad: function(){
-      window.location.href = '/#/cadastro'
-    }
+  methods: {
+    redirectToCad: function () {
+      window.location.href = "/#/cadastro";
+    },
   },
   data() {
     return {
-      Users: [
+      users: [
         {
-          Email: "marcus@gmail.com",
-          Nome: "Reiner",
-          Celular: "(41) 99897.3325",
+          email: "Reiner@gmail.com",
+          nome: "Reiner",
+          celular: "(41) 99897.3325",
         },
         {
-          Email: "marcus@gmail.com",
-          Nome: "Mikassa Arkeman",
-          Celular: "(41) 99897.3325",
+          email: "Mikassa@gmail.com",
+          nome: "Mikassa Arkeman",
+          celular: "(41) 99897.3325",
         },
         {
-          Email: "marcus@gmail.com",
-          Nome: "Eren Yeager",
-          Celular: "(41) 99897.3325",
+          email: "Eren.Yeager@gmail.com",
+          nome: "Eren Yeager",
+          celular: "(41) 99897.3325",
         },
       ],
     };
