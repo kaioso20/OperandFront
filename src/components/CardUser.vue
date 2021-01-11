@@ -41,38 +41,43 @@ export default {
   props: {
     user: Object,
   },
-  methods:{
-    removerUsuario: function(_id){
-      this.$store.commit('removeUser', {_id})
+  methods: {
+    removerUsuario: function (_id) {
+      const confirmation = confirm("Deseja mesmo remover o usuário?");
+      if (!confirmation) this.$store.commit("removeUser", { _id });
     },
-    editarUsuario: function(_id){
-      console.log(_id)
+    editarUsuario: function (_id) {
+      this.$router.push({ name: "Cadastro", params: { _id } });
     },
-  }
+  },
 };
 </script>
 
 <style>
-
-.montserrat300I{
-    font-family: 'Montserrat', sans-serif;
+.montserrat300I {
+  font-family: "Montserrat", sans-serif;
 }
-.subtitleCard{
-    font-size: 10px;
-    margin: 5px auto;
+.subtitleCard {
+  font-size: 10px;
+  margin: 5px auto;
 }
-.h2Else{
-    text-align: center;
+.h2Else {
+  text-align: center;
 }
-.eachCard{
-    margin: 20px auto;
-    background: linear-gradient(90deg, rgba(238,238,238,1) 0%, rgba(249,249,249,1) 41%, rgba(255,255,255,0) 64%);
+.eachCard {
+  margin: 20px auto;
+  background: linear-gradient(
+    90deg,
+    rgba(238, 238, 238, 1) 0%,
+    rgba(249, 249, 249, 1) 41%,
+    rgba(255, 255, 255, 0) 64%
+  );
 }
-.card-header, 
-.card-footer{
-    background: none !important;
+.card-header,
+.card-footer {
+  background: none !important;
 }
-.titleCard{
-    font-family: 'Merriweather', serif;
+.titleCard {
+  font-family: "Merriweather", serif;
 }
 </style>

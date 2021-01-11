@@ -5,6 +5,11 @@
         label="Voltar para Listagem"
         :onClickFunction="redirectToList"
       ></Button>
+      <div v-if="errors.length > 0">
+        <div v-for="error in errors" :key="error">
+          <AlertErro :error="error" classe="alert alert-danger"></AlertErro>
+        </div>
+      </div>
       <form @submit.prevent="saveUser">
         <div>
           <BRow>
@@ -79,15 +84,33 @@
 <script>
 import Button from "./../../components/Button";
 import Input from "./../../components/Input";
+import AlertErro from "./../../components/AlertErro";
 import { BRow } from "bootstrap-vue";
 
 import store from "./../../store";
 
 export default {
   name: "CadastroUsuario",
+  created() {
+    const _id = this.$router.currentRoute.params._id;
+
+    if (_id) {
+      const { celular, email, nome } = this.$store.getters.pickOneUserById({
+        _id,
+      });
+      this.data = {
+        _id,
+        nome,
+        celular,
+        email,
+      };
+    }
+  },
   data() {
     return {
+      errors: [],
       data: {
+        _id: "",
         nome: "",
         email: "",
         celular: "",
@@ -100,17 +123,51 @@ export default {
     BRow,
     Button,
     Input,
+    AlertErro,
   },
   methods: {
     redirectToList: function () {
-      window.location.href = "/#/";
-      return;
+      this.$router.go(-1);
     },
     saveUser: function () {
-      const { nome, email, celular, senha, cSenha } = this.data;
-      if (senha !== cSenha) return;
-      store.commit("incrementUser", { user: { _id: Math.random(), nome, email, celular, senha } });
+      this.errors = [];
+      const { _id, nome, email, celular, senha, cSenha } = this.data;
+
+      if (!_id) {
+        if (!senha) {
+          this.errors.push("Necessita de uma senha");
+        }
+
+        if (senha !== cSenha) {
+          this.errors.push("Senhas não são idênticas");
+        }
+      }
+
+      if (!nome) {
+        this.errors.push("Necessita de um nome");
+      }
+
+      if (!email) {
+        this.errors.push("Necessita de um email");
+      }
+
+      if (this.errors.length) {
+        return;
+      }
+
+      if (_id) {
+        store.commit("editUser", {
+          user: { _id, nome, email, celular, senha },
+        });
+        this.redirectToList();
+        return;
+      }
+
+      store.commit("incrementUser", {
+        user: { _id: Math.random(), nome, email, celular, senha },
+      });
       this.redirectToList();
+      return;
     },
     limparCampos: function () {
       this.data.nome = "";

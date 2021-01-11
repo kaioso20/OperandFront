@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     redirectToCad: function () {
-      window.location.href = "/#/cadastro";
+      this.$router.push(`/cadastro`)
     },
   },
   computed: {
