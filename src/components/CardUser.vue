@@ -44,7 +44,7 @@ export default {
   methods: {
     removerUsuario: function (_id) {
       const confirmation = confirm("Deseja mesmo remover o usuário?");
-      if (!confirmation) this.$store.commit("removeUser", { _id });
+      if (confirmation) this.$store.commit("usuario/removeUser", { _id });
     },
     editarUsuario: function (_id) {
       this.$router.push({ name: "Cadastro", params: { _id } });

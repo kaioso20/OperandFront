@@ -36,7 +36,7 @@ export default {
   },
   computed: {
     users: function () {
-      return this.$store.getters.todos
+      return this.$store.getters['usuario/todos']
     } 
   },
 };

@@ -87,15 +87,15 @@ import Input from "./../../components/Input";
 import AlertErro from "./../../components/AlertErro";
 import { BRow } from "bootstrap-vue";
 
-import store from "./../../store";
-
 export default {
   name: "CadastroUsuario",
   created() {
     const _id = this.$router.currentRoute.params._id;
 
     if (_id) {
-      const { celular, email, nome } = this.$store.getters.pickOneUserById({
+      const { celular, email, nome } = this.$store.getters[
+        "usuario/pickOneUserById"
+      ]({
         _id,
       });
       this.data = {
@@ -156,14 +156,14 @@ export default {
       }
 
       if (_id) {
-        store.commit("editUser", {
+        this.$store.commit("usuario/editUser", {
           user: { _id, nome, email, celular, senha },
         });
         this.redirectToList();
         return;
       }
 
-      store.commit("incrementUser", {
+      this.$store.commit("usuario/incrementUser", {
         user: { _id: Math.random(), nome, email, celular, senha },
       });
       this.redirectToList();
