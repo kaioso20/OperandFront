@@ -99,6 +99,7 @@ export default {
       ]({
         _id,
       });
+
       this.data = {
         _id,
         nome,
@@ -194,10 +195,14 @@ export default {
 
       const method = _id ? "usuario/editUser" : "usuario/incrementUser";
 
-      _id = !_id ? Math.random() : _id;
-
       this.$store.commit(method, {
-        user: { _id, nome, email, celular, senha },
+        user: {
+          _id: !_id ? Math.random() : _id,
+          nome,
+          email,
+          celular,
+          senha: !_id || this.editarSenha ? senha : this.data.oldSenha,
+        },
       });
 
       this.redirectToList();

@@ -13,7 +13,7 @@
     </div>
     <div v-else>
       <hr />
-      <h2 class="h2Else">Não existe nenhum Usuário registrado</h2>
+      <h2 class="h2Else">Não existe nenhum usuário registrado</h2>
     </div>
   </div>
 </template>
@@ -30,13 +30,13 @@ export default {
   },
   methods: {
     redirectToCad: function () {
-      this.$router.push(`/cadastro`)
+      this.$router.push(`/cadastro`);
     },
   },
   computed: {
     users: function () {
-      return this.$store.getters['usuario/todos']
-    } 
+      return this.$store.getters["usuario/todos"];
+    },
   },
 };
 </script>

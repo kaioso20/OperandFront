@@ -23,15 +23,15 @@ export default {
     label: String,
     variant: {
       type: String,
-      default: 'primary'
+      default: "primary",
     },
     type: {
       type: String,
-      default: 'button'
+      default: "button",
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     onClickFunction: Function,
   },

@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div
-      :class="classe"
-      role="alert"
-    >
+    <div :class="classe" role="alert">
       {{ error }}
     </div>
   </div>
@@ -12,10 +9,10 @@
 <script>
 export default {
   name: "AlertErro",
-  props:{
-      error: String,
-      classe: String
-  }
+  props: {
+    error: String,
+    classe: String,
+  },
 };
 </script>
 
