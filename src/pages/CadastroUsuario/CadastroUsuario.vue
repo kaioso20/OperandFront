@@ -1,93 +1,64 @@
 <template>
-  <div class="container">
-    <div class="mt10">
-      <Button
-        label="Voltar para Listagem"
-        :onClickFunction="redirectToList"
-      ></Button>
-      <div v-if="errors.length > 0">
-        <div v-for="error in errors" :key="error">
-          <AlertErro :error="error" classe="alert alert-danger"></AlertErro>
-        </div>
+  <div>
+    <div class="container">
+      <div class="mt10">
+        <Button
+          label="Voltar para Listagem"
+          :onClickFunction="redirectToList"
+        ></Button>
       </div>
-      <form @submit.prevent="saveUser">
-        <div>
-          <BRow>
-            <Input
-              type="text"
-              classInp="form-control"
-              classDiv="col-sm-12"
-              label="Nome:"
-              v-model="data.nome"
-            />
-          </BRow>
+    </div>
+    <div class="boxColor">
+      <div class="boxCenter">
+        <div v-if="errors.length > 0">
+          <div v-for="error in errors" :key="error">
+            <AlertErro :error="error" classe="alert alert-danger"></AlertErro>
+          </div>
         </div>
-        <div>
-          <BRow>
-            <Input
-              type="email"
-              v-model="data.email"
-              placeholder="Eren.Yeager@gmail.com"
-              classInp="form-control"
-              classDiv="col-sm-12"
-              label="E-mail:"
-            />
-          </BRow>
-        </div>
-        <div>
-          <BRow>
-            <Input
-              type="text"
-              placeholder="(00) 00000-0000"
-              classInp="form-control celularMask"
-              classDiv="col-sm-12"
-              label="Celular:"
-              v-mask="mask"
-              v-model="data.celular"
-            />
-          </BRow>
-        </div>
-        <div>
-          <BRow>
-            <Input
-              type="password"
-              classInp="form-control"
-              classDiv="col-sm-12"
-              label="Senha:"
-              v-model="data.senha"
-            />
-          </BRow>
-        </div>
-        <div>
-          <BRow>
-            <Input
-              type="password"
-              classInp="form-control"
-              classDiv="col-sm-12"
-              label="Confirme senha:"
-              v-model="data.cSenha"
-            />
-          </BRow>
-        </div>
-        <div class="mt10">
-          <Button label="Salvar" type="submit"></Button>
-          <Button
-            label="Limpar Campos"
-            variant="secondary"
-            :onClickFunction="limparCampos"
-          ></Button>
-        </div>
-      </form>
+        <form @submit.prevent="saveUser">
+          <Input type="text" label="Nome:" v-model="data.nome" />
+          <Input
+            type="email"
+            v-model="data.email"
+            placeholder="Eren.Yeager@gmail.com"
+            label="E-mail:"
+          />
+          <Input
+            type="text"
+            placeholder="(00) 0 0000-0000"
+            label="Celular:"
+            v-mask="mask"
+            v-model="data.celular"
+          />
+          <Input type="password" label="Senha:" v-model="data.senha" />
+          <Input
+            type="password"
+            label="Confirme senha:"
+            v-model="data.cSenha"
+          />
+          <div class="mt10">
+            <Button label="Salvar" type="submit"></Button>
+            <Button
+              label="Limpar Campos"
+              variant="secondary"
+              :onClickFunction="limparCampos"
+            ></Button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import "./CadastroUsuario.css";
+
+// import { required, minLength } from "vuelidate/lib/validators";
+
 import Button from "./../../components/Button";
 import Input from "./../../components/Input";
 import AlertErro from "./../../components/AlertErro";
 import { Mascaras } from "../../utils/masks";
-import { BRow } from "bootstrap-vue";
 
 export default {
   name: "CadastroUsuario",
@@ -123,7 +94,6 @@ export default {
     };
   },
   components: {
-    BRow,
     Button,
     Input,
     AlertErro,
@@ -134,7 +104,7 @@ export default {
     },
     saveUser: function () {
       this.errors = [];
-      const { _id, nome, email, celular, senha, cSenha } = this.data;
+      var { _id, nome, email, celular, senha, cSenha } = this.data;
 
       if (!_id) {
         if (!senha) {
@@ -154,21 +124,16 @@ export default {
         this.errors.push("Necessita de um email");
       }
 
-      if (this.errors.length) {
-        return;
-      }
+      if (this.errors.length) return
 
-      if (_id) {
-        this.$store.commit("usuario/editUser", {
-          user: { _id, nome, email, celular, senha },
-        });
-        this.redirectToList();
-        return;
-      }
+      const method = _id ? "usuario/editUser" : "usuario/incrementUser";
 
-      this.$store.commit("usuario/incrementUser", {
-        user: { _id: Math.random(), nome, email, celular, senha },
+      _id = !_id ? Math.random() : _id;
+
+      this.$store.commit(method, {
+        user: { _id, nome, email, celular, senha },
       });
+
       this.redirectToList();
       return;
     },
