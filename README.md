@@ -2,6 +2,7 @@
 
 - Olá, para você que não me conhece tão bem, me chamo Caio Rafael e estou desenvolvendo o teste técnico para a empresa Operand.
 - O projeto em si é uma tanto quanto simples, porém contém o desenvolvimento feito seguindo a documentação do VueJs e com o conhecimento de experiências profissionais passadas.
+- **Vídeo explicativo do projeto pode ser encontrado [clicando aqui](https://photos.app.goo.gl/B7QsMGj6EDZVQj1d9)**
 
 ## Instalação do projeto
 
