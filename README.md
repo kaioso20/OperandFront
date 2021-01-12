@@ -6,7 +6,7 @@
 
 ## Instalação do projeto
 
-Na inicialização, você deve executar o código abaixo no seu prompt bash para funcionamento vincular as dependências no projeto. Para isso, você deverá ter o Node.js instalado (caso não saiba onde baixar, [clique aqui](https://nodejs.org/en/download/))
+Na inicialização, você deve executar o código abaixo no seu prompt bash para vincular as dependências no projeto. Para isso, você deverá ter o Node.js instalado (caso não saiba onde baixar, [clique aqui](https://nodejs.org/en/download/))
 ```
 cd C: <seu diretório>/operandfront
 npm install
