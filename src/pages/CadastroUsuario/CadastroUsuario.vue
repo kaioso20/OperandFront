@@ -30,12 +30,21 @@
             v-mask="mask"
             v-model="data.celular"
           />
-          <Input type="password" label="Senha:" v-model="data.senha" />
-          <Input
-            type="password"
-            label="Confirme senha:"
-            v-model="data.cSenha"
-          />
+          <div v-if="data._id && editarSenha">
+            <Input
+              type="password"
+              label="Senha Atual:"
+              v-model="data.senhaAtual"
+            />
+          </div>
+          <div v-if="!data._id || (data._id && editarSenha)">
+            <Input type="password" label="Senha:" v-model="data.senha" />
+            <Input
+              type="password"
+              label="Confirme senha:"
+              v-model="data.cSenha"
+            />
+          </div>
           <div class="mt10">
             <Button label="Salvar" type="submit"></Button>
             <Button
@@ -43,6 +52,15 @@
               variant="secondary"
               :onClickFunction="limparCampos"
             ></Button>
+            <div v-if="data._id" class="mt10">
+              <Button
+                :label="
+                  editarSenha ? 'Cancelar edição de senha' : 'Editar senha'
+                "
+                variant="info"
+                :onClickFunction="trocaSenha"
+              ></Button>
+            </div>
           </div>
         </form>
       </div>
@@ -52,8 +70,6 @@
 
 <script>
 import "./CadastroUsuario.css";
-
-// import { required, minLength } from "vuelidate/lib/validators";
 
 import Button from "./../../components/Button";
 import Input from "./../../components/Input";
@@ -66,7 +82,7 @@ export default {
     const _id = this.$router.currentRoute.params._id;
 
     if (_id) {
-      const { celular, email, nome } = this.$store.getters[
+      const { celular, email, nome, senha } = this.$store.getters[
         "usuario/pickOneUserById"
       ]({
         _id,
@@ -76,6 +92,7 @@ export default {
         nome,
         celular,
         email,
+        oldSenha: senha,
       };
     }
   },
@@ -90,7 +107,10 @@ export default {
         celular: "",
         senha: "",
         cSenha: "",
+        senhaAtual: "",
+        oldSenha: "",
       },
+      editarSenha: false,
     };
   },
   components: {
@@ -102,29 +122,59 @@ export default {
     redirectToList: function () {
       this.$router.go(-1);
     },
-    saveUser: function () {
+    validations: function () {
       this.errors = [];
-      var { _id, nome, email, celular, senha, cSenha } = this.data;
+      let formErrors = [];
 
-      if (!_id) {
-        if (!senha) {
-          this.errors.push("Necessita de uma senha");
+      if (!this._id || this.editarSenha) {
+        if (!this.senha) {
+          formErrors.push("Necessita de uma senha");
         }
 
-        if (senha !== cSenha) {
-          this.errors.push("Senhas não são idênticas");
+        if (this.senha !== this.cSenha) {
+          formErrors.push("Senhas não são idênticas");
+        } else if (this.editarSenha && this.data.oldSenha === this.senha) {
+          formErrors.push("Senha é a mesma da antiga");
+        }
+
+        if (this.editarSenha && this.data.oldSenha !== this.data.senhaAtual) {
+          formErrors.push("Senha atual incorreta");
         }
       }
 
-      if (!nome) {
-        this.errors.push("Necessita de um nome");
+      if (!this.nome) {
+        formErrors.push("Necessita de um nome");
       }
 
-      if (!email) {
-        this.errors.push("Necessita de um email");
+      if (this.nome && this.nome.length < 4) {
+        formErrors.push("Nome necessita de pelo menos 4 caracteres");
       }
 
-      if (this.errors.length) return
+      if (!this.email) {
+        formErrors.push("Necessita de um email");
+      } else if (!this._id) {
+        const possuiEmail = this.$store.getters["usuario/findUserByEmail"]({
+          email: this.email,
+        });
+
+        if (possuiEmail) {
+          formErrors.push("Este email já está cadastrado no sistema");
+        }
+      }
+
+      this.errors = formErrors;
+
+      if (formErrors.length) return false;
+
+      return true;
+    },
+    trocaSenha: function () {
+      this.editarSenha = !this.editarSenha;
+    },
+    saveUser: function () {
+      if (!this.validations()) return;
+
+      var { _id, nome, email, celular, senha } = this.data;
 
       const method = _id ? "usuario/editUser" : "usuario/incrementUser";
 

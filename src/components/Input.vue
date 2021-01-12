@@ -1,6 +1,3 @@
-// @input="setName($event.target.value)"
-// https://vuelidate.js.org/#sub-without-v-model
-
 <template>
   <div>
     <div :class="classDiv">
@@ -9,10 +6,11 @@
           <div class="label">{{ label }}</div> </BCol
         ><BCol sm="9">
           <input
-            :type="type || 'text'"
-            :placeholder="placeholder || ''"
-            :name="name || ''"
-            :class="classInp || ''"
+            :type="type"
+            :placeholder="placeholder"
+            :name="name"
+            :disabled="disabled"
+            :class="classInp"
             :value="value"
             @input="$emit('input', $event.target.value)"
           />
@@ -36,8 +34,18 @@ export default {
     type: String,
     placeholder: String,
     name: String,
-    classDiv: { type: String, default: "estilizacaoCampo01" },
-    classInp: {type: String, default: 'width100p form-control'},
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    classDiv: {
+      type: String,
+      default: "estilizacaoCampo01",
+    },
+    classInp: {
+      type: String,
+      default: "width100p form-control",
+    },
     label: String,
   },
 };

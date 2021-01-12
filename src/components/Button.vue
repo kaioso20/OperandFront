@@ -1,6 +1,6 @@
 <template>
   <BButton
-    size="sm"
+    size="md"
     :disabled="disabled"
     :type="type"
     :variant="variant"
