@@ -16,6 +16,7 @@ Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 
 Vue.config.productionTip = false
+Vue.config.silent = true
 
 new Vue({
   store,
