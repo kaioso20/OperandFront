@@ -1,4 +1,4 @@
-const Mascaras = [
+export const maskPhone = [
   "(",
   /[0-9]/,
   /\d/,
@@ -15,5 +15,3 @@ const Mascaras = [
   /\d/,
   /\d/,
 ];
-
-export { Mascaras }

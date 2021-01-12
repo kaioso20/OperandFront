@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import "./ListaUsuarios.css";
 import Button from "../../components/Button";
 import CardUser from "../../components/CardUser";
 

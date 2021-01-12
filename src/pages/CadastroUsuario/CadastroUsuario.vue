@@ -16,12 +16,14 @@
           </div>
         </div>
         <form @submit.prevent="saveUser">
-          <Input type="text" label="Nome:" v-model="data.nome" />
+          <Input type="text" label="Nome:" v-model.trim="data.nome" />
           <Input
             type="email"
             v-model="data.email"
-            placeholder="Eren.Yeager@gmail.com"
+            placeholder="eren.yeager@gmail.com"
             label="E-mail:"
+            :disabled="!!this.data._id"
+            :removeSpaces="true"
           />
           <Input
             type="text"
@@ -35,24 +37,28 @@
               type="password"
               label="Senha Atual:"
               v-model="data.senhaAtual"
+              :removeSpaces="true"
+              autocomplete="on"
             />
           </div>
           <div v-if="!data._id || (data._id && editarSenha)">
-            <Input type="password" label="Senha:" v-model="data.senha" />
+            <Input
+              type="password"
+              label="Senha:"
+              v-model="data.senha"
+              :removeSpaces="true"
+              autocomplete="on"
+            />
             <Input
               type="password"
               label="Confirme senha:"
               v-model="data.cSenha"
+              :removeSpaces="true"
+              autocomplete="on"
             />
           </div>
           <div class="mt10">
-            <Button label="Salvar" type="submit"></Button>
-            <Button
-              label="Limpar Campos"
-              variant="secondary"
-              :onClickFunction="limparCampos"
-            ></Button>
-            <div v-if="data._id" class="mt10">
+            <div v-if="data._id" class="mb10">
               <Button
                 :label="
                   editarSenha ? 'Cancelar edição de senha' : 'Editar senha'
@@ -61,6 +67,12 @@
                 :onClickFunction="trocaSenha"
               ></Button>
             </div>
+            <Button label="Salvar" type="submit"></Button>
+            <Button
+              label="Limpar Campos"
+              variant="secondary"
+              :onClickFunction="limparCampos"
+            ></Button>
           </div>
         </form>
       </div>
@@ -74,7 +86,7 @@ import "./CadastroUsuario.css";
 import Button from "./../../components/Button";
 import Input from "./../../components/Input";
 import AlertErro from "./../../components/AlertErro";
-import { Mascaras } from "../../utils/masks";
+import { maskPhone } from "../../utils/masks";
 
 export default {
   name: "CadastroUsuario",
@@ -99,7 +111,7 @@ export default {
   data() {
     return {
       errors: [],
-      mask: Mascaras,
+      mask: maskPhone,
       data: {
         _id: "",
         nome: "",
@@ -126,39 +138,43 @@ export default {
       this.errors = [];
       let formErrors = [];
 
-      if (!this._id || this.editarSenha) {
-        if (!this.senha) {
-          formErrors.push("Necessita de uma senha");
-        }
+      if (!this.data.nome) {
+        formErrors.push("Necessita de um nome");
+      }
 
-        if (this.senha !== this.cSenha) {
-          formErrors.push("Senhas não são idênticas");
-        } else if (this.editarSenha && this.data.oldSenha === this.senha) {
-          formErrors.push("Senha é a mesma da antiga");
+      if (this.data.nome && this.data.nome.length < 4) {
+        formErrors.push("Nome necessita de pelo menos 4 caracteres");
+      }
+
+      if (!this.data.email) {
+        formErrors.push("Necessita de um email");
+      } else if (!this.data._id) {
+        const possuiEmail = this.$store.getters["usuario/findUserByEmail"]({
+          email: this.data.email,
+        });
+
+        if (possuiEmail) {
+          formErrors.push("Este e-mail já está cadastrado no sistema");
+        }
+      }
+
+      if (!this.data.celular) {
+        formErrors.push("Necessita de celular");
+      } else if (this.data.celular && this.data.celular.length < 16) {
+        formErrors.push("Celular inválido");
+      }
+
+      if (!this.data._id || this.editarSenha) {
+        if (!this.data.senha) {
+          formErrors.push("Necessita de uma senha");
         }
 
         if (this.editarSenha && this.data.oldSenha !== this.data.senhaAtual) {
           formErrors.push("Senha atual incorreta");
-        }
-      }
-
-      if (!this.nome) {
-        formErrors.push("Necessita de um nome");
-      }
-
-      if (this.nome && this.nome.length < 4) {
-        formErrors.push("Nome necessita de pelo menos 4 caracteres");
-      }
-
-      if (!this.email) {
-        formErrors.push("Necessita de um email");
-      } else if (!this._id) {
-        const possuiEmail = this.$store.getters["usuario/findUserByEmail"]({
-          email: this.email,
-        });
-
-        if (possuiEmail) {
-          formErrors.push("Este email já está cadastrado no sistema");
+        } else if (this.data.senha !== this.data.cSenha) {
+          formErrors.push("Senhas não são idênticas");
+        } else if (this.editarSenha && this.data.oldSenha === this.data.senha) {
+          formErrors.push("Senha é a mesma da antiga");
         }
       }
 
@@ -189,10 +205,11 @@ export default {
     },
     limparCampos: function () {
       this.data.nome = "";
-      this.data.email = "";
+      if (!this.data._id) this.data.email = "";
       this.data.celular = "";
       this.data.senha = "";
       this.data.cSenha = "";
+      this.data.senhaAtual = "";
     },
   },
 };

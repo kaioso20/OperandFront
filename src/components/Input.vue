@@ -12,7 +12,9 @@
             :disabled="disabled"
             :class="classInp"
             :value="value"
+            :autocomplete="autocomplete"
             @input="$emit('input', $event.target.value)"
+            v-on="removeSpaces ? { keydown: onRemoveSpaces } : {}"
           />
         </BCol>
       </BRow>
@@ -28,6 +30,11 @@ export default {
   components: {
     BRow,
     BCol,
+  },
+  methods: {
+    onRemoveSpaces: function (params) {
+      if (params.code === "Space") params.preventDefault();
+    },
   },
   props: {
     value: String,
@@ -47,6 +54,14 @@ export default {
       default: "width100p form-control",
     },
     label: String,
+    removeSpaces: {
+      type: Boolean,
+      default: false,
+    },
+    autocomplete: {
+      type: String,
+      default: "off",
+    },
   },
 };
 </script>

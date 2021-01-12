@@ -26,8 +26,8 @@ const getters = {
     pickOneUserById: (state) => (payload) => {
         return state.usuarios.find(item => item._id === payload._id)
     },
-    existsUserByEmail: (state) => (payload) => {
-        return !! state.usuarios.find(item => item.email === payload.email)
+    findUserByEmail: (state) => (payload) => {
+        return !!state.usuarios.find(item => item.email === payload.email)
     },
 }
 
